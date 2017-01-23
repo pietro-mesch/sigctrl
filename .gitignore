@@ -17,6 +17,12 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#LaTeX output
+*.aux
+*.log
+*.synctex.gz
+
+
 # =========================
 # Operating System Files
 # =========================
