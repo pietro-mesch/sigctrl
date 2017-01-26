@@ -1,5 +1,34 @@
 \section*{About Notation}
-\DefTable{def:nettopology}{Network Topology}{
-$i,j \in $ &  &  nodes (junctions) \\
-$a,b \in A \subseteq N \times N$ &  &  nodes (junctions) \\
+\ObjTable{t:nettopology}{Network Topology}{
+$i,j \in N$ 											&  nodes (junctions) \\
+$a,b \in A \subseteq N \times N$ 						&  directional arcs (lanes or lane groups) \\
+$a=\left( N^{-}_{a},N^{+}_{a} \right)$ 					& tail node and head node of arc $a$ \\
+$A^{-}_{i} = \left\{ a \in A | N^{+}_{a} = i \right\}$ 	& backward star of node $i$ (inbound arcs)\\
+$A^{+}_{i} = \left\{ b \in A | N^{-}_{a} = i \right\}$ 	& forward star of node $i$ (outbound arcs) \\
+$y,z \in Y$ 											& manoeuvres \\
+}
+\DefTable{d:supplydemand}{Supply and Demand}{
+$q_{a}$ 						& \vehs			& demand flow on arc $a$ \\
+$\hat{q}_{a}$					& \vehs			& saturation flow on arc $a$ \\
+$\phi_a = \sfrac{q_{a}}{\hat{q}_{a}}$ 	&		& flow ratio of arc $a$ \\
+}
+
+\ObjTable{t:signalisation}{Signalisation}{
+$p,q \in P_{j}$ 				& signal phases at junction $j$ \\
+$A^{p} \subseteq A^{-}_{j} $ 	& arcs gaining the right of way during phase $p$ \\
+}
+\DefTable{d:signaltiming}{Signal timing}{
+$t^{C}_{j}$ & \seconds		& signal phases at junction $j$ \\
+$t{p}$ 		& \seconds		& nominal duration of phase $p$ \\
+$g{a}$ 		& \seconds		& effective green time for arc or lane group $a$ \\
+$\gamma_{a} = \sfrac{g_{a}}{t^{C}_{j}}$ 	&	&  effective green share for arc or lane group $a$ \\
+$\chi_a = \sfrac{\phi_{a}}{\gamma_{a}}$ 		&	& saturation of arc or lane group $a$ \\
+$t^{L}_{j}$ & \seconds		& time lost at junction $j$ \\
+$t^{O}_{j}$ & \seconds		& timing offset of junction $j$ \\
+}
+
+\DefTable{d:performance}{Performance Indices}{
+$t^{Q}_{a}$ 			& \seconds	& queue clearance time on arc $a$ \\
+$\omega^{stop}_{a}$ 	& 			& share of vehicles stopped on arc $a$ \\
+$\omega^{d}_{a}$ 		& \seconds	& average user delay $a$ \\
 }

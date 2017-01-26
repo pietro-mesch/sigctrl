@@ -13,6 +13,7 @@
 
 \newcommand{\yesno}{\small{[}Y/N{]}}
 \newcommand{\kmh}{\small{[}km/h{]}}
+\newcommand{\vehs}{\small{[}veh/s{]}}
 \newcommand{\vehh}{\small{[}veh/h{]}}
 \newcommand{\vehkm}{\small{[}veh/km{]}}
 \newcommand{\seconds}{\small{[}s{]}}
@@ -41,10 +42,33 @@
 % #3 --> description
 % ---------------------------------------------
 
+\newcommand{\ObjTable}[3]{
+\renewcommand{\row}{\\ \hline}
+
+		\begin{longtabu} to \textwidth { X[-4l]  X[7j] }
+		%TITLE HEADER
+		\multicolumn{2}{l}{\large{#2 \label{#1}}} \\
+		 \rowcolor{tableHeader}		 
+		 Symbol & Description \\
+		\endfirsthead		
+		% HEADER (REPEATED on every page)		 
+		 \multicolumn{2}{r}{\small{\textit{\ldots continued from previous page}} } \\	 
+		 \rowcolor{tableHeader}		 
+		 Symbol & Description \\
+		 \endhead
+		% FOOTER (only if continued)
+		 \multicolumn{2}{r}{\small{\textit{\ldots continued on next page}} }
+		 \endfoot
+		% LAST FOOTER (only at true end of table)
+		\endlastfoot		 
+		  #3
+		\end{longtabu}
+}
+
 \newcommand{\DefTable}[3]{
 \renewcommand{\row}{\\ \hline}
 
-		\begin{longtabu} to \textwidth { X[-2c]  X[-2c]  X[7j] }
+		\begin{longtabu} to \textwidth { X[-3l]  X[-2c]  X[7j] }
 		%TITLE HEADER
 		\multicolumn{3}{l}{\large{#2 \label{#1}}} \\
 		 \rowcolor{tableHeader}		 
@@ -63,7 +87,6 @@
 		  #3
 		\end{longtabu}
 }
-
 
 %% COMMAND LINE PARAMETER LIST
 \newcommand{\cmdLineParamTable}[3]{

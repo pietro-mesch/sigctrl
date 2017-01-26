@@ -11,23 +11,18 @@
   \endgroup
 }
 
-%% Report options
-%\DeclareOption{11pt}{
-%  \PassOptionsToClass{\CurrentOption}{book}
-%}
-
 %% Fallback
 \DeclareOption*{
   \ClassWarning{mzkThesis}{Unknown option '\CurrentOption'}
 }
 
 %% Execute default options
-\ExecuteOptions{11pt}
+\ExecuteOptions{12pt}
 %% Process given options
 \ProcessOptions\relax
 
 %% Load base layout
-\LoadClass[11pt,a4paper,twoside]{book}
+\LoadClass[12pt,a4paper,twoside]{book}
 
 %% TABLE STYLES
 \RequirePackage{mzkTables}
@@ -44,7 +39,7 @@
 \RequirePackage{setspace}
 
 %% CAPTIONS
-\RequirePackage[font=large,labelfont=sf,labelsep=endash,width=0.85\textwidth]{caption}
+\RequirePackage[font=small,labelfont=rm,labelsep=endash,width=0.85\textwidth]{caption}
 
 %% HYPERREF AND BIBLIOGRAPHY
 \RequirePackage[square]{natbib}

@@ -2,12 +2,11 @@
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
 \ProvidesPackage{mzkStyles}[2017/01/23 mzkStyles]
 \RequirePackage{lmodern}
-\RequirePackage{amsmath,amssymb}
-
+\RequirePackage{amsmath,amsfonts,amssymb}
 \RequirePackage[pdftex]{graphicx}
 \RequirePackage{tikz}
 \RequirePackage{framed}
-\RequirePackage{dirtree}
+\RequirePackage{xfrac}
 \RequirePackage{listings}
 
 %% Fonts
@@ -19,7 +18,7 @@
 
 %%%%%%%%%%%%%%   OPTIONS   %%%%%%%%%%%%%%%
 %% 'sans serif' option
-\DeclareOption{serif}{
+\DeclareOption{sans}{
   \renewcommand{\familydefault}{\sfdefault}
 }
 
@@ -29,11 +28,12 @@
 }
 
 %% sans is default for now
-\ExecuteOptions{sans}
+\ExecuteOptions{serif}
 \ProcessOptions\relax
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%  FIGURE STYLES  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%\fig{placement}{filepath}{label}{captiontext}{dimensions}
 \newcommand{\fig}[5]{
 \begin{figure}[#1]
 \begin{center}
@@ -43,6 +43,12 @@
 \end{figure}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%  EQUATION STYLES  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\eq}[2]{
+\begin{equation}\label{#1}
+#2
+\end{equation}
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%  TEXT STYLES  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
