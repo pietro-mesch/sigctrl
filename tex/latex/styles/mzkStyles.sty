@@ -1,0 +1,99 @@
+%% DEPENDANCIES ALL GOOD
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{mzkStyles}[2017/01/23 mzkStyles]
+\RequirePackage{lmodern}
+\RequirePackage{amsmath,amssymb}
+
+\RequirePackage[pdftex]{graphicx}
+\RequirePackage{tikz}
+\RequirePackage{framed}
+\RequirePackage{dirtree}
+\RequirePackage{listings}
+
+%% Fonts
+%\RequirePackage[rm,sfdefault,light]{roboto}
+%\usepackage[T1]{fontenc}
+
+\RequirePackage{palatino}
+\usepackage[T1]{fontenc}
+
+%%%%%%%%%%%%%%   OPTIONS   %%%%%%%%%%%%%%%
+%% 'sans serif' option
+\DeclareOption{serif}{
+  \renewcommand{\familydefault}{\sfdefault}
+}
+
+%% Global indentation option
+\DeclareOption{neverindent}{
+\setlength{\parindent}{0pt}
+}
+
+%% sans is default for now
+\ExecuteOptions{sans}
+\ProcessOptions\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%  FIGURE STYLES  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\fig}[5]{
+\begin{figure}[#1]
+\begin{center}
+\includegraphics[#5]{#2}
+\caption{#4}\label{#3}
+\end{center}
+\end{figure}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%  TEXT STYLES  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\highlight}[1]{\colorbox{yellow}{#1}} % \hilight{questo sara evidenziato}
+
+% BOX %
+\usepackage[
+framemethod=tikz,
+skipbelow=\topskip,
+skipabove=\topskip
+]{mdframed}
+\mdfsetup{
+	leftmargin=0pt,
+	rightmargin=0pt,
+	backgroundcolor=gray,
+	linecolor=black,
+	roundcorner=4pt
+}
+% define backgroundcolor
+\definecolor{gray}{rgb}{0.85, 0.85, 0.85}
+\definecolor{tableHeader}{HTML}{D8D8D8}
+\definecolor{infobg}{HTML}{FCFCFC}
+\definecolor{infobd}{HTML}{AAB8C6}
+\definecolor{warnbg}{HTML}{FFF8F7}
+\definecolor{warnbd}{HTML}{D04437}
+\definecolor{notebg}{HTML}{FFFDF6}
+\definecolor{notebd}{HTML}{FFEAAE}
+
+
+\mdfdefinestyle{grey}{backgroundcolor=gray}
+\mdfdefinestyle{infobox}{backgroundcolor=infobg,linecolor=infobd,innerleftmargin=1cm,
+	singleextra={
+		\node[xshift=15pt,yshift=-12pt] at (P-|O) {\includegraphics[]{PIX/common/info.png}};
+	}
+}
+\mdfdefinestyle{warnbox}{backgroundcolor=warnbg,linecolor=warnbd,innerleftmargin=1cm,
+	singleextra={
+		\node[xshift=15pt,yshift=-12pt] at (P-|O) {\includegraphics[]{PIX/common/warn.png}};
+	}
+}
+
+\mdfdefinestyle{notebox}{backgroundcolor=notebg,linecolor=notebd,innerleftmargin=1cm,
+	singleextra={
+		\node[xshift=15pt,yshift=-12pt] at (P-|O) {\includegraphics[]{PIX/common/note.png}};
+	}
+}
+% BOX %
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%  commands  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\tags}[1]{
+\textbf{Tags: }#1
+}
+
+\endinput

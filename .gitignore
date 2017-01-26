@@ -22,6 +22,10 @@ $RECYCLE.BIN/
 *.log
 *.synctex.gz
 
+#MY FUFFA
+tex/latex/styles/ptvUserMan.cls
+tex/latex/styles/sistemaGeneric.cls
+
 
 # =========================
 # Operating System Files

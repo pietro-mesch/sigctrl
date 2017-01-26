@@ -1,0 +1,208 @@
+%%% TABLES
+
+%% DEPENDANCIES
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{mzkTables}[2017/01/23 mzkTables]
+
+\RequirePackage{longtable}
+
+\RequirePackage{tabu}
+\RequirePackage[table]{xcolor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  UNITS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\yesno}{\small{[}Y/N{]}}
+\newcommand{\kmh}{\small{[}km/h{]}}
+\newcommand{\vehh}{\small{[}veh/h{]}}
+\newcommand{\vehkm}{\small{[}veh/km{]}}
+\newcommand{\seconds}{\small{[}s{]}}
+\newcommand{\eurkm}{\small{[}€/km{]}}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%  TABLE MACROS  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\row}{\\ \hline}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%  TABLE STYLES  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% GLOBAL SETTINGS
+\setlength{\extrarowheight}{3pt}
+\setlength{\textfloatsep}{10pt plus 1.0pt minus 2.0pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% ---------------------------------------------
+%% NOTATION TABLE 
+% ---------------------------------------------
+% #1 --> symbol
+% #2 --> units
+% #3 --> description
+% ---------------------------------------------
+
+\newcommand{\DefTable}[3]{
+\renewcommand{\row}{\\ \hline}
+
+		\begin{longtabu} to \textwidth { X[-2c]  X[-2c]  X[7j] }
+		%TITLE HEADER
+		\multicolumn{3}{l}{\large{#2 \label{#1}}} \\
+		 \rowcolor{tableHeader}		 
+		 Symbol & Unit & Description \\
+		\endfirsthead		
+		% HEADER (REPEATED on every page)		 
+		 \multicolumn{3}{r}{\small{\textit{\ldots continued from previous page}} } \\	 
+		 \rowcolor{tableHeader}		 
+		 Symbol & Unit & Description \\
+		 \endhead
+		% FOOTER (only if continued)
+		 \multicolumn{3}{r}{\small{\textit{\ldots continued on next page}} }
+		 \endfoot
+		% LAST FOOTER (only at true end of table)
+		\endlastfoot		 
+		  #3
+		\end{longtabu}
+}
+
+
+%% COMMAND LINE PARAMETER LIST
+\newcommand{\cmdLineParamTable}[3]{
+\renewcommand{\row}{\\ \hline}
+
+		\begin{longtabu} to \textwidth {| X[-4l] | X[-4r] | X[7l] X[-2r] |}
+		%TITLE HEADER
+		\multicolumn{4}{l}{\large{Table \ref{#1}: #2 \label{#1}}} \row
+		 \rowcolor{tableHeader}		 
+		 Parameter name & Default & Description & \row
+		\endfirsthead		
+		% HEADER (REPEATED on every page)		 
+		 \multicolumn{4}{r}{\small{\textit{\ldots continued from previous page}} } \row	 
+		 \rowcolor{tableHeader}		 
+		 Parameter name & Default & Description & \row
+		 \endhead
+		% FOOTER (only if continued)
+		 \multicolumn{4}{r}{\small{\textit{\ldots continued on next page}} }
+		 \endfoot
+		% LAST FOOTER (only at true end of table)
+		\hline
+		\endlastfoot		 
+		  #3
+		\end{longtabu}
+
+}
+
+% ---------------------------------------------
+%% TDE TABLE 
+% ---------------------------------------------
+% #1 --> reference table
+% #2 --> table name
+% #3 --> table header 
+% ---------------------------------------------
+
+%%%%%% SUPERSCRIPT KEYS
+% PRIMARY KEY
+\newcommand{\tdePK}{$^{\, PK}$}
+% UNIQUE KEY
+\makeatletter
+\def\tdeU{\@ifnextchar[{\@with}{\@without}}
+\def\@with[#1]{$^{\, U #1}$}
+\def\@without#1{$^{\, U}$}
+\makeatother
+
+\newcommand{\TDETable}[3]{
+\renewcommand{\row}{\\ \hline}
+
+		\begin{longtabu} to \textwidth {| X[-5l] | X[-4l] | X[-3l] | X[-4l] | X[7j] | X[-2l] |}
+		%TITLE HEADER
+		\multicolumn{6}{l}{\large{Table \ref{#1}: #2 \label{#1}}} \row
+		 \rowcolor{tableHeader}		 
+		 Field & Type & Unit & Valid & Semantics & Default \row
+		\endfirsthead		
+		% HEADER (REPEATED on every page)		 
+		 \multicolumn{6}{r}{\small{\textit{\ldots continued from previous page}} } \row	 
+		 \rowcolor{tableHeader}		 
+		 Field & Type & Unit & Valid & Semantics & Default \row
+		 \endhead
+		% FOOTER (only if continued)
+		 \multicolumn{6}{r}{\small{\textit{\ldots continued on next page}} }
+		 \endfoot
+		% LAST FOOTER (only at true end of table)
+		\hline
+		\endlastfoot		 
+		  #3
+		\end{longtabu}
+}
+
+% ---------------------------------------------
+%% GENERIC TABLE WITH CUSTOM NUMBER OF FIELDS
+% ---------------------------------------------
+% #1 --> table reference
+% #2 --> table name
+% #3 --> number table fields 
+% #4 --> table header
+% #5 --> table formatting
+% #6 --> table content
+% #7 --> table width
+% ---------------------------------------------
+\newcommand{\genericTable}[7]{
+\renewcommand{\row}{\\ \hline}
+
+		\begin{longtabu} to #7 [l]{#5}
+		%TITLE HEADER
+		\multicolumn{#3}{l}{\large{Table \ref{#1}: #2 \label{#1}}} \row
+		 \rowcolor{tableHeader}		 
+		 #4 \row
+		\endfirsthead		
+		% HEADER (REPEATED on every page)		 
+		 \multicolumn{#3}{r}{\small{\textit{\ldots continued from previous page}} } \row	 
+		 \rowcolor{tableHeader}		 
+		 #4 \row
+		 \endhead
+		% FOOTER (only if continued)
+		 \multicolumn{#3}{r}{\small{\textit{\ldots continued on next page}} }
+		 \endfoot
+		% LAST FOOTER (only at true end of table)
+		\hline
+		\endlastfoot		 
+		  #6
+		\end{longtabu}
+}
+
+%% AUTHORS FRONT PAGE TABLE
+\newcommand{\makeAuthorsTable}{
+\newsavebox\sapienza
+\savebox\sapienza{
+\begin{tabu} to 2.5cm {X[1,c,m]}
+  \includegraphics[width=2.2cm]{PIX/common/spinoffSapienza_nologo.png} \\
+  \includegraphics[width=2.2cm]{PIX/common/PTV_Group_baronly.png} \\
+ \end{tabu}
+}
+
+\newsavebox\certificates
+\savebox\certificates{
+ \begin{tabu} to 3.6cm {X[1,c,m]}
+  \includegraphics[width=1.5cm]{PIX/common/ISO9001_SQS_it.png}
+  \includegraphics[width=1.5cm]{PIX/common/IQNET_gm_al.png} \\
+ \end{tabu}
+}
+
+\begin{tabular}{lcl}
+\hline
+ \usebox{\sapienza}
+ &  
+ \begin{tabular}{r|lr}
+  Drafted: & \@author & \dateDraft \\ 
+ \hline 
+  Approved: & \docReviewer & \dateAppro \\ 
+ \hline 
+  File Name: & \multicolumn{2}{l}{\docName} \\ 
+ \end{tabular} 
+& 
+ \usebox{\certificates} \\
+
+\hline
+\copyright SISTeMA s.r.l. &  & www.sistemaits.com \\
+\end{tabular}
+}
+
+%% FOOTER TABLE
