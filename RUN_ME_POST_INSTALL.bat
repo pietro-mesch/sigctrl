@@ -19,7 +19,7 @@ SET MIKTEX_VER=2.9
 
 SET SISTEMATEX_PATH=%CD%
 echo Indexing SISTeMATeX folder . . .
-texhash --register-root=%SISTEMATEX_PATH% && (
+initexmf --register-root "%SISTEMATEX_PATH%" && (
 echo.
 echo Folder indexed successfully.
 echo Close this window now if you don't need to map new fonts.

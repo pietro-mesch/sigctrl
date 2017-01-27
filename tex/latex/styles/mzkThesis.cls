@@ -43,6 +43,7 @@
 
 %% HYPERREF AND BIBLIOGRAPHY
 \RequirePackage[square]{natbib}
+\RequirePackage{imakeidx}
 \RequirePackage[unicode, hidelinks]{hyperref}
 \RequirePackage[numbered]{bookmark}
 \RequirePackage{url}

@@ -1,60 +1,96 @@
 The following chapter briefly illustrates the main features of a signal plan devised for urban traffic regulation.
-This term encompasses all timings and schedules behind the delicate clockwork of traffic signals, from the elements that constitute a single signal program at one of the many junctions of the network, to the succession of network-wide program changes designed to meet the daily evolution of traffic demand and the propagation of vehicle flows.
+This term encompasses all timings and schedules behind the delicate clockwork of traffic signals, from the elements that constitute a single signal program at one of the many junctions of the network, to the succession of network-wide program changes designed to meet the daily evolution of traffic demand and the propagation of vehicle flows \index{Signal Plan}.
+
 The features presented in this section fully define what is commonly called a pre-timed plan, and as such do not describe any real-time actuation or decision making logic.
 They are themselves, however, the decision variables of most optimisation methods and adaptive strategies, and it is crucial to understand their significance in order to appreciate the diversity of setting and control approaches illustrated in more detail throughout this chapter.
 
 \fig{h}{1_PLAN/PIX/signalplan.png}{fig:plan}{
 Elements of a network-wide signal plan: a daily schedule specifies the signal programs running at each intersection. The sequence and duration of signal phases repeats over the course of every signal cycle as specified by the different signal programs, administering junction capacity amongst the expected traffic flows. During each phase, a set of compatible manoeuvres is allowed through while the others remain closed.}{width=\textwidth}
 
-\section{Signal Phases}
-Traffic signals exist mainly to separate conflicting traffic flows competing for the right of way at a road intersection. The natural way of doing so is to bundle compatible (e.g. non-secant) manoeuvres which may be safely performed simultaneously into signal phases, so that the corresponding flows may be allowed through the junction in turn. 
+\subsection{Signal Phases}
+Traffic signals exist mainly to separate conflicting traffic flows competing for the right of way at a road intersection. The natural way of doing so is to bundle compatible (e.g. non-secant) manoeuvres which may be safely performed simultaneously into signal phases, so that the corresponding flows may be allowed through the junction in turn \index{Signal Phase}.
+
 Phases are the fundamental blocks of a signal program, and are usually repeated in the same order at every signal cycle, although some signalisation systems provide phase skipping, usually as part of their public transport prioritisation strategy.
-Manoeuvres may pertain to different modes of transport, meaning that cars, trams and pedestrians are taken into joint consideration and can be given the right of way during the same signal phase.
-With reference to Figure \ref{fig:phasing}, consider a junction, i.e. a network node $j$ where it is possible to perform a given set of manoeuvres $Y_j$ . The generic manoeuvre $y \in Y_j$ may be a turn, from an arc $a \in A^{-}_{j}$ of the node backward star, to a forward star arc $b \in A^{+}_{j}$, or a pedestrian crossing affecting one or more arcs either entering or leaving the junction.
+Manoeuvres may pertain to different modes of transport, meaning that cars, trams and pedestrians are taken into joint consideration and can be given the right of way during the same signal phase
+
+With reference to Figure \ref{fig:phasing}, consider a \emph{junction}, i.e. a network node $j$ where it is possible to perform a given set of \emph{manoeuvres} $Y_j$ \index{Junction}.
+ The generic manoeuvre \index{Manoeuvre} $y \in Y_j$ may be a turn, from an arc $a \in A^{-}_{j}$ of the node backward star, to a forward star arc $b \in A^{+}_{j}$, or a pedestrian crossing affecting one or more arcs either entering or leaving the junction \index{Backward Star} \index{Forward Star}.
 
 \fig{h}{1_PLAN/PIX/phasing.png}{fig:phasing}{
 Manoeuvres at an intersection, conflict areas and possible phasing options: option A avoids direct conflicts between Eastbound (E-) and Westbound (W-) manoeuvres, as would be desirable if high volumes were expected along that direction; option B favours a lower number of phase changes (less lost time) assuming flows to be such that left turning vehicles have space to wait at the middle of the intersection, and time to clear after the opposite through flow has decreased sufficiently to let them safely complete the manoeuvre.}{width=\textwidth} 
+From this point on, in order to present a more straightforward correlation between manoeuvres, junction geometrical layout and signalisation, the discussion will presuppose a single homogeneous class of users (e.g. private transport cars).
+It shall be clear that the principles illustrated may be easily extended to handle more heterogeneous combinations of vehicle types.
 
-From this point on, in order to present a more straightforward correlation between manoeuvres, junction geometrical layout and signalisation, the focus will be on private transport vehicles only. It shall be clear that the principles illustrated may be easily extended to handle more heterogeneous combinations of users.
 Under given flow conditions and for a given junction layout, manoeuvres may or may not be safe to perform simultaneously: this information is easily represented by a square Boolean matrix where rows and columns correspond to each manoeuvre and elements comply with the following rule:
-\eq{eq:compatiblemanoeuvres}{
+\eq{eq:compatibledelta}{
 \delta_{yz}=\left\{
 \begin{array}{ll}
 1 & \textrm{if } y \textrm{ and } z \textrm{ are compatible} \\ 
 0 & \textrm{otherwise}
 \end{array}
-\quad \forall y,z \in Y_j \right.
+\quad \forall y,z \in Y_j \right. \: .
+}
+Each signal phase $p \in Y_j$ identifies with a subset of compatible manoeuvres. The set of phases $P_j$ selected for the junction must therefore belong to the space of feasible signal phases, i.e. all possible combinations of manoeuvres contained in the power set $\wp(Yj)$ such that no two are incompatible. The union of all phases must also include every available manoeuvre at least once. Formally, $P_j$ must therefore comply with the following properties:
+\eq{eq:compatiblemanoeuvres}{
+P_j=\left\lbrace p \in \wp\left(Y_j \right) \middle| \prod_{y \in p} \prod_{z \in p} \delta_{yz} = 1 \right\rbrace \quad , \quad \bigcup_{p \, \in \, P_j} p = Y_j
+\; .
+}
+Clearly, the power set $\wp(Yj)$ contains sets of manoeuvres that, although compatible and  technically feasible, make little practical sense.
+
+Selection of an optimal set of phases $P_j$ satisfying relation \eqref{eq:compatiblemanoeuvres} with respect to a specific objective (e.g. minimum total delay) for given demand flows, is a combinatorial bi-level problem whose lower level is Signal Setting. The solution is usually obtained through a \emph{what if} approach, for which the selection of a good set of phases remains largely a traffic engineer’s task.
+
+In practice, the choice of signal phases cannot transcend the physical junction layout: manoeuvres coming from the same backward star arc $a$ can only be separated into different phases if users can queue on a dedicated lane for each subset of manoeuvres, without hindering the traffic flows directed towards other destinations.
+As everyday experience testifies, traffic signals do not allow or prohibit manoeuvres directly, but rather regulate vehicle egress from lanes (or lane groups) dedicated to specific sets of manoeuvres.
+
+Each lane or group of adjacent lanes sharing the same manoeuvre set $Y_a \subseteq Y_j$ can be conceptually assimilated into a \index{Lane Group} \emph{lane group}: a single independent arc $a \in A^{-}_{j}$ of the node backward star, whose flows, queues and physical characteristics are derived from a combination of demand and supply properties for each individual lane.
+ 
+Let $A_p$ be the set of lane groups which are given the green light during signal phase $p$, and $Y_p$ the corresponding set of manoeuvres:
+\eq{eq:phasemanoeuvres}{
+Y_p = \bigcup_{a \in A_p} Y_a
+\; .
+}
+The set of manoeuvres $Y_a$ specific to each lane group $a$ is relevant for the determination of the arc effective outflow capacity, which may be affected by partial conflicts with other manoeuvres allowed during the same phase. The HCM (2010) manual presents practical methods for quantifying such effects.
+
+Henceforth, the discussion will only concern manoeuvres implicitly, in the aggregate form of lane groups referred to as arcs: a signal phase is simply a time period during which certain arcs are open, and the others are closed.
+
+\subsection{Signal Program}
+A \emph{signal program} is a cyclic set of instructions spanning a period called \emph{cycle time} that regulates the state changes of all signals at a given junction \index{Signal Program}.
+For signal planning and optimisation, it is practical to view the program as a succession of signal phases with specific durations, as portrayed in Figure \ref{fig:plan}, rather than a sequence of switching times for the individual lights opening and closing each lane group. The present chapter adopts this phase-based signal program definition.
+
+The program specifies the point of the signal cycle at which each one of the phases planned for a given junction begins and ends.
+Transitions between subsequent phases are generally pre-timed sequences of light state changes that handle the closure of a set of lane groups before opening the next e.g. pre-red and pre-green amber signals.
+
+\subsection{Daily Schedule}
+It is common practice to tailor several signal programs to the traffic conditions normally observed at different times of the day, in order to meet each scenario with the best possible allocation of resources. The daily schedule defines the sequence of programs that each junction will run over the course of the day \index{Daily Schedule}.
+
+\subsection{Cycle Time}
+The signal cycle time $t^{C}_{j}$ is the \emph{period} of the signal program, i.e. the time lapse between two occurrences of the same signal phase at a given junction \index{Cycle Time}.
+It affects the average delay and the level of saturation at which the intersection may operate. In general, longer cycle times increase the total throughput by attenuating the effects of the time lost in signal phase changes, but also imply larger \emph{average} delays.
+
+\subsection{Effective Green Shares}
+The nominal duration of each phase $t_p$ is seldom exploited by demand flows at the full capacity of the corresponding arcs: even assuming that vehicles are not held back by downstream congestion, it is necessary to account for some transient phenomena affecting the performance of a junction.
+
+As the signals turn green at the beginning of each phase, some time is lost before the queuing vehicles start moving and until the flow through the stop line reaches the arc capacity; conversely, vehicles may keep crossing the junction during the amber light, but a fraction of its duration must be allowed for vehicles to clear the junction.
+After taking into account these delays and extensions, the portion of cycle time during which a given lane group $a$ may allow traffic onto the junction at full capacity is referred to as its \emph{effective green share}.
+The absolute and relative durations of effective green experienced by each lane group during phase $p$ are denoted respectively as:
+\eq{eq:effectivegreenphase}{
+g_{ap} \in \left[ 0,t_p \right] \qquad ,
+\qquad \gamma_{ap} = \frac{g_{ap}}{t^{C}_{j}} 
+\; .
 }
 
-Each signal phase $p \in Y_j$ identifies with a subset of compatible manoeuvres. The set of phases $P_j$ selected for the junction must therefore belong to the space of feasible signal phases, i.e. all possible combinations of manoeuvres contained in the power set $\mathcal{P}(Yj)$ such that no two are incompatible. The union of all phases must also include every available manoeuvre at least once. Formally, $P_j$ must therefore comply with the following properties:
-% .
-%(2) 
-%Clearly, the power set (Yj) contains sets of manoeuvres that, although compatible and  technically feasible, make little practical sense. The selection of an optimal set of phases Pj satisfying relation (2) with respect to a specific objective (e.g. minimum total delay), for given demand flows, is a combinatorial bi-level problem whose lower level is Signal Setting. The solution is usually obtained through a what-if approach, in which the selection of a good set of phases remains largely a traffic engineer’s task.
-%Conceptually, the determination of signal phases is thus driven by the interactions between manoeuvres. From a practical point of view, however, administration of the right of way by means of traffic signals cannot transcend the junction layout: it is only possible to separate different manoeuvres coming from the same approach to a junction if each group of manoeuvres has a dedicated lane, allowing those vehicles to queue without hindering the others; conversely, as everyday experience testifies, traffic signals do not allow or prohibit manoeuvres directly, but rather regulate vehicle egress from lanes (or lane groups) dedicated to specific sets of manoeuvres.
-%Each lane or group of adjacent lanes sharing the same manoeuvre set Ya  Yj can be conceptually assimilated into a lane group: a single independent arc aAj of the node backward star, whose flows, queues and physical characteristics are derived from a combination of demand and supply properties for each individual lane. 
-%Let Ap be the set of lane groups which are given the green light during signal phase p, and Yp the corresponding set of manoeuvres:
-% .
-%(3) 
-%The set of manoeuvres Ya specific to each lane group a is relevant for the determination of the arc effective outflow capacity, which may be affected by partial conflicts with other manoeuvres allowed during the same phase. The HCM (2010) manual presents practical methods for quantifying such effects.
-%Henceforth, the discussion will only concern manoeuvres implicitly, in the aggregate form of lane groups referred to as arcs: a signal phase is simply a time period during which certain arcs are open, and the others are closed.
-%Signal Program
-%A signal program contains the state switching times for all signals at a given junction.
-%For signal planning and optimisation, it is practical to view the program as a succession of signal phases with specific durations, as portrayed in Figure 1, rather than the sequence of switching times of individual lights opening and closing each lane group: the present chapter adopts this phase-based signal program definition.
-%A signal program is a cyclic set of instructions spanning a period called cycle time. For a given phase set, it specifies the start and end of each signal phase, with respect to the beginning of the cycle. Transitions between subsequent phases are generally pre-timed sequences of light state changes that handle the closure of a set of lane groups before opening the next e.g. pre-red and pre-green amber signals.
-%Daily Schedule
-%It is common practice to tailor several signal programs to the traffic conditions normally observed at different times of the day, in order to meet each scenario with the best possible allocation of resources. The daily schedule defines the sequence of programs that each junction will run over the course of the day.
-%Cycle Time
-%The cycle time tjC is the period of the signal program, i.e. the time lapse between two occurrences of the same signal phase at a given junction. It affects the average delay and the level of saturation at which the intersection may operate. In general, longer cycle times imply larger average delays, but increase the total throughput, which may be necessary to deal with high demand flows by attenuating the effects of the time lost in signal phase changes.
-%Effective Green Shares
-%The nominal duration of each phase tp is seldom exploited by demand flows at the full capacity of the corresponding arcs: even assuming that vehicles are not held back by downstream congestion, it is necessary to account for some transient phenomena affecting the performance of a junction.
-%As the signals turn green at the beginning of each phase, some time is lost before the queuing vehicles start moving and until the flow through the stop line reaches the arc capacity; conversely, vehicles may keep crossing the junction during the amber light, but a fraction of its duration must be allowed for vehicles to clear the junction.
-%After taking into account these delays and extensions, the portion of cycle time during which a given lane group a may allow traffic onto the junction at full capacity is referred to as its effective green share. The absolute and relative durations of effective green experienced by each lane group during phase p are denoted respectively as:
-%	             and              .
-%(4)
-%It is not uncommon to have a lane group open during more than one phase: typically, an approach experiencing high traffic volumes is given the right of way over two or more consecutive phases without incurring further lost time in the phase change.
-%The effective green of each arc a is then calculated from the total effective green time it gathers over all relevant phases:
-%        and        
-%(5)
-%Offset
-%When multiple intersections are considered, synchronisation issues are addressed by defining a global time reference, with all junctions sharing the same cycle time, or integer fractions thereof. Each junction may then have all of its phase switching times anticipated or delayed in order to operate in concert with the neighbouring ones.
-%The amount of time tjO, by which the beginning of a cycle at one junction j lags or leads the global reference instant, is referred to as a positive or negative offset, respectively.
+It is not uncommon to have a lane group open during more than one phase: typically, an approach experiencing high traffic volumes is given the right of way over two or more consecutive phases without incurring further lost time in the phase change.
+The lane group effective green is then calculated from the total effective green time it gathers over all relevant phases \index{Effective Green}
+\eq{eq:effectivegreenlane}{
+g_a = \sum_{p \in P_j}{g_{ap}} \quad \textrm{with} \left\lbrace
+\begin{array}{ll}
+0 < g_{ap} \leq t_p & \textrm{if } a \in A_p \\ 
+g_{ap} = 0 & \textrm{otherwise}
+\end{array} \right. \quad , \quad
+\gamma_a = \frac{g_a}{t^{C}_{j}} \; .
+}
+
+\subsection{Offset}
+When multiple intersections are considered, synchronisation issues are addressed by defining a global time reference, with all junctions sharing the same cycle time or integer fractions thereof. Each junction may then have all of its phase switching times anticipated or delayed in order to operate in concert with the neighbouring ones.
+
+The amount of time $t^{O}_{j}$ by which the beginning of a cycle at junction $j$ lags or leads the global reference instant is referred to as a positive or negative \emph{offset}, respectively \index{Offset}.
